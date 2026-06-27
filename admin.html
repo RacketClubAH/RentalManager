@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aphrodite Hills — Rental Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --foam:#F9F6F4; --white:#FFFFFF; --shell:#D6D1C3; --pearl:#CFCDC9; --line:#E7E2D9;
+    --mple:#003087; --mple-press:#00205C; --mple-soft:#E7EAF3;
+    --bronze:#8E7A6B; --bronze-soft:#F0ECE6;
+    --ink:#454545; --muted:#938C82;
+    --ok:#4A7A5C; --ok-soft:#E9F0EB; --alert:#A8503D; --alert-soft:#F6EAE6;
+    --radius:14px; --radius-sm:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{background:var(--foam);color:var(--ink);font-family:Geologica,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .brandbar{position:sticky;top:0;z-index:20;background:var(--mple);display:flex;justify-content:center;align-items:center;padding:13px 16px}
+  .brandbar img{height:28px;width:auto;display:block}
+  .wrap{max-width:880px;margin:0 auto;padding:20px 16px 60px}
+
+  #lock{position:fixed;inset:0;background:var(--foam);display:flex;flex-direction:column;z-index:50}
+  .lock-inner{flex:1;display:flex;align-items:center;justify-content:center;padding:24px}
+  .lockcard{width:100%;max-width:360px;text-align:center}
+  .lockcard .eyebrow{font-weight:500;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze)}
+  .lockcard h1{font-family:'Playfair Display',serif;font-weight:600;font-size:25px;color:var(--mple);margin:9px 0 22px}
+  .lockcard input{width:100%;font-size:16px;font-family:inherit;font-weight:300;text-align:center;letter-spacing:.05em;padding:14px;border:1px solid var(--line);border-radius:var(--radius-sm);background:#fff}
+  .lockcard input:focus{outline:none;border-color:var(--mple)}
+  .lockcard button{width:100%;margin-top:12px;background:var(--mple);color:#fff;font-family:Geologica;font-weight:500;font-size:13px;letter-spacing:.12em;text-transform:uppercase;border:none;border-radius:var(--radius-sm);padding:15px;cursor:pointer}
+  .lockcard button:active{background:var(--mple-press)}
+  .lockcard .err{color:var(--alert);font-size:13px;font-weight:300;margin-top:12px;min-height:18px}
+
+  header.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 2px 20px;flex-wrap:wrap}
+  .bar .title h1{font-family:'Playfair Display',serif;font-weight:600;font-size:24px;color:var(--mple)}
+  .bar .title .sub{color:var(--muted);font-size:12.5px;font-weight:300;margin-top:2px}
+  .bar .actions{display:flex;gap:9px}
+  .btn{font-family:Geologica;font-weight:500;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border-radius:9px;padding:11px 15px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);transition:background .12s}
+  .btn:active{background:var(--foam)}
+  .btn.primary{background:var(--mple);color:#fff;border-color:var(--mple)}.btn.primary:active{background:var(--mple-press)}
+
+  .avail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+  .acard{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;align-items:center;gap:15px}
+  .acard .ic{width:48px;height:48px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:20px;font-family:'Playfair Display',serif;font-weight:600}
+  .acard.padel .ic{background:var(--mple-soft);color:var(--mple)}.acard.tennis .ic{background:var(--bronze-soft);color:var(--bronze)}
+  .acard .big{font-family:'Playfair Display',serif;font-weight:600;font-size:32px;line-height:1;font-variant-numeric:tabular-nums}
+  .acard.padel .big{color:var(--mple)}.acard.tennis .big{color:var(--bronze)}
+  .acard .lbl{font-size:12px;color:var(--muted);font-weight:300;margin-top:6px}.acard .lbl b{color:var(--ink);font-weight:500}
+
+  .tabs{display:flex;gap:2px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+  .tab{font-family:Geologica;font-weight:500;font-size:12.5px;letter-spacing:.04em;color:var(--muted);background:none;border:none;padding:11px 13px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+  .tab.active{color:var(--mple);border-bottom-color:var(--mple)}
+  .tab .num{font-size:11px;background:var(--bronze-soft);color:var(--bronze);border-radius:20px;padding:1px 8px;margin-left:6px;vertical-align:middle;font-weight:500}
+  .tab.active .num{background:var(--mple);color:#fff}
+
+  .search{width:100%;font-size:15px;font-family:inherit;font-weight:300;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius-sm);background:#fff;margin-bottom:14px}
+  .search:focus{outline:none;border-color:var(--mple)}
+
+  .rental{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:11px}
+  .rental .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .rental .who{min-width:0}
+  .rental .nm{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;color:var(--ink)}
+  .rental .id{font-size:11.5px;color:var(--bronze);margin-left:8px;font-weight:400}
+  .rental .contact{font-size:12.5px;color:var(--muted);font-weight:300;margin-top:3px;word-break:break-word}
+  .rental .when{font-size:11.5px;color:var(--muted);font-weight:300;white-space:nowrap;text-align:right}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+  .chip{font-size:12px;font-weight:400;padding:5px 11px;border-radius:8px}
+  .chip.padel{background:var(--mple-soft);color:var(--mple)}.chip.tennis{background:var(--bronze-soft);color:var(--bronze)}
+  .rental .rowbtns{display:flex;gap:9px;margin-top:14px}
+  .rowbtns .btn{flex:1;text-align:center;padding:11px}
+  .btn.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.btn.ok:active{filter:brightness(.92)}
+  .btn.dmg{background:#fff;color:var(--alert);border-color:#E4C9C2}.btn.dmg:active{background:var(--alert-soft)}
+
+  .status-pill{font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:20px;white-space:nowrap}
+  .status-pill.returned{background:var(--ok-soft);color:var(--ok)}
+  .status-pill.damaged{background:var(--alert-soft);color:var(--alert)}
+  .rental .notes{font-size:13px;color:var(--ink);font-weight:300;background:var(--foam);border:1px solid var(--line);border-radius:9px;padding:9px 11px;margin-top:11px}
+  .rental .notes b{color:var(--alert);font-weight:500}
+
+  .player{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .player .pinfo{min-width:0}
+  .player .pn{font-family:'Playfair Display',serif;font-weight:600;font-size:15.5px;color:var(--ink)}
+  .player .pid{font-size:11px;color:var(--bronze);margin-left:7px;font-weight:400}
+  .player .pc{font-size:12.5px;color:var(--muted);font-weight:300;margin-top:2px;word-break:break-word}
+  .player .prent{flex:none;font-size:11.5px;padding:9px 14px}
+
+  .empty{text-align:center;color:var(--muted);padding:46px 20px;font-size:14px;font-weight:300}
+  .empty .em-ic{font-family:'Playfair Display',serif;font-size:34px;margin-bottom:10px;color:var(--bronze)}
+  .empty .eh{font-family:'Playfair Display',serif;font-weight:600;color:var(--mple);margin-bottom:5px;font-size:17px}
+  #loading{text-align:center;color:var(--muted);font-weight:300;padding:40px;font-size:14px}
+
+  .modal-bg{position:fixed;inset:0;background:rgba(0,32,92,.4);display:none;align-items:flex-end;justify-content:center;z-index:60}
+  .modal-bg.show{display:flex}
+  @media(min-width:560px){.modal-bg{align-items:center;padding:20px}}
+  .modal{background:var(--white);width:100%;max-width:520px;border-radius:18px 18px 0 0;padding:22px;max-height:92vh;overflow-y:auto}
+  @media(min-width:560px){.modal{border-radius:18px}}
+  .modal h3{font-family:'Playfair Display',serif;font-size:21px;font-weight:600;color:var(--mple);margin-bottom:16px}
+  .modal label{display:block;font-size:13px;font-weight:400;margin:0 0 7px;color:var(--ink)}
+  .modal input[type=text],.modal input[type=email],.modal input[type=tel],.modal input[type=date],.modal textarea{
+    width:100%;font-family:inherit;font-size:16px;font-weight:300;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:var(--foam);margin-bottom:14px}
+  .modal input:focus,.modal textarea:focus{outline:none;border-color:var(--mple);background:#fff}
+  .modal textarea{resize:vertical;min-height:80px}
+
+  .seg{display:flex;background:var(--foam);border:1px solid var(--line);border-radius:11px;padding:4px;margin-bottom:18px}
+  .seg button{flex:1;font-family:Geologica;font-weight:500;font-size:12px;letter-spacing:.04em;border:none;background:none;color:var(--muted);padding:9px;border-radius:8px;cursor:pointer;text-transform:uppercase}
+  .seg button.on{background:var(--mple);color:#fff}
+
+  .cust-results{max-height:200px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:14px}
+  .cust-row{padding:11px 13px;border-bottom:1px solid var(--line);cursor:pointer}
+  .cust-row:last-child{border-bottom:none}.cust-row:active{background:var(--foam)}
+  .cust-row.sel{background:var(--mple-soft)}
+  .cust-row .crn{font-weight:400;font-size:14px;color:var(--ink)}
+  .cust-row .crc{font-size:12px;color:var(--muted);font-weight:300;margin-top:1px}
+  .cust-empty{padding:16px;text-align:center;color:var(--muted);font-size:13px;font-weight:300}
+
+  .mini-sport{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+  .mini-sport .nm{flex:1;font-weight:400;font-size:14px;color:var(--ink)}
+  .mini-sport .av{font-size:12px;color:var(--muted);font-weight:300}
+  .stepper{display:flex;flex:none}
+  .stepper button{width:36px;height:36px;border:1px solid var(--line);background:#fff;font-size:19px;color:var(--mple);cursor:pointer}
+  .stepper button:first-child{border-radius:9px 0 0 9px}.stepper button:last-child{border-radius:0 9px 9px 0}
+  .stepper button:disabled{opacity:.3;color:var(--muted)}.stepper button:active{background:var(--foam)}
+  .stepper .c{width:40px;height:36px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;place-items:center;font-weight:500;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .agree-mini{display:flex;gap:10px;align-items:flex-start;margin:6px 0 18px;cursor:pointer}
+  .agree-mini input{width:20px;height:20px;flex:none;margin-top:1px;accent-color:var(--mple)}
+  .agree-mini span{font-size:13px;line-height:1.45;color:var(--muted);font-weight:300}
+  .eq-label{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--bronze);margin:4px 0 10px}
+  .modal .mbtns{display:flex;gap:10px;margin-top:4px}.modal .mbtns .btn{flex:1;padding:13px}
+  .modal .merr{color:var(--alert);font-size:13px;font-weight:300;margin-bottom:12px;display:none}.modal .merr.show{display:block}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--mple);color:#fff;font-size:13.5px;font-weight:300;padding:12px 20px;border-radius:11px;opacity:0;transition:all .25s;z-index:70;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div id="lock">
+  <div class="brandbar"><img src="aphrodite-logo-white.png" alt="Aphrodite Hills"></div>
+  <div class="lock-inner">
+    <div class="lockcard">
+      <div class="eyebrow">Racket Club</div>
+      <h1>Rental desk</h1>
+      <input type="password" id="pw" placeholder="Staff password" autocomplete="off">
+      <button id="unlock">Open dashboard</button>
+      <div class="err" id="lock-err"></div>
+    </div>
+  </div>
+</div>
+
+<div id="shell" style="display:none">
+<div class="brandbar"><img src="aphrodite-logo-white.png" alt="Aphrodite Hills"></div>
+<div class="wrap" id="app">
+  <header class="bar">
+    <div class="title"><h1>Rental desk</h1><div class="sub" id="last-sync">Loading…</div></div>
+    <div class="actions">
+      <button class="btn" id="refresh">Refresh</button>
+      <button class="btn primary" id="new-btn">+ New rental</button>
+    </div>
+  </header>
+
+  <div class="avail-grid">
+    <div class="acard padel"><div class="ic">P</div><div><div class="big" id="padel-big">–</div><div class="lbl" id="padel-lbl">padel available</div></div></div>
+    <div class="acard tennis"><div class="ic">T</div><div><div class="big" id="tennis-big">–</div><div class="lbl" id="tennis-lbl">tennis available</div></div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="active">Out now <span class="num" id="active-num">0</span></button>
+    <button class="tab" data-tab="history">History <span class="num" id="hist-num">0</span></button>
+    <button class="tab" data-tab="players">Players <span class="num" id="players-num">0</span></button>
+  </div>
+
+  <input type="text" class="search" id="search" placeholder="Search…" style="display:none">
+  <div id="loading">Loading…</div>
+  <div id="list"></div>
+</div>
+</div>
+
+<div class="modal-bg" id="new-modal">
+  <div class="modal">
+    <h3>New rental</h3>
+    <div class="seg"><button id="seg-new" class="on">New player</button><button id="seg-existing">Existing player</button></div>
+    <div class="merr" id="new-err"></div>
+    <div id="mode-new">
+      <label>Full name</label><input type="text" id="m-name" autocomplete="off">
+      <label>Email</label><input type="email" id="m-email" autocomplete="off">
+      <label>Phone</label><input type="tel" id="m-phone" autocomplete="off">
+      <label>Date of birth</label><input type="date" id="m-dob">
+    </div>
+    <div id="mode-existing" style="display:none">
+      <input type="text" class="search" id="cust-search" placeholder="Search registered players by name…" style="margin-bottom:10px">
+      <div class="cust-results" id="cust-results"></div>
+    </div>
+    <div class="eq-label">Equipment</div>
+    <div class="mini-sport padel"><div class="nm">Padel</div><div class="av" id="m-padel-av"></div>
+      <div class="stepper"><button type="button" data-s="padel" data-d="-1">−</button><div class="c" id="m-padel-c">0</div><button type="button" data-s="padel" data-d="1">+</button></div></div>
+    <div class="mini-sport tennis"><div class="nm">Tennis</div><div class="av" id="m-tennis-av"></div>
+      <div class="stepper"><button type="button" data-s="tennis" data-d="-1">−</button><div class="c" id="m-tennis-c">0</div><button type="button" data-s="tennis" data-d="1">+</button></div></div>
+    <label class="agree-mini" id="tc-block"><input type="checkbox" id="m-agree"><span>Customer has read and accepted the terms &amp; conditions.</span></label>
+    <div class="mbtns"><button class="btn" id="new-cancel">Cancel</button><button class="btn primary" id="new-save">Save rental</button></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="dmg-modal">
+  <div class="modal">
+    <h3>Report a problem</h3>
+    <div class="merr" id="dmg-err"></div>
+    <label>What's the issue?</label>
+    <textarea id="dmg-notes" placeholder="e.g. Padel racket handle cracked, or 1 tennis racket not returned"></textarea>
+    <div class="mbtns"><button class="btn" id="dmg-cancel">Cancel</button><button class="btn dmg" id="dmg-save">Mark as damaged</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   CONFIG - change these
+   ============================================================ */
+var APPS_SCRIPT_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+var READ_TOKEN      = "desk-7Kp2";    // MUST match READ_TOKEN in Code.gs
+var STAFF_PASSWORD  = "racket2026";   // staff password for this screen
+var CLUB_NAME       = "Aphrodite Hills";
+/* ============================================================ */
+
+document.title = CLUB_NAME + " - Rental Desk";
+
+var DATA=null, currentTab='active', dmgTargetId=null;
+var modalMode='new', mPick={padel:0,tennis:0}, selectedCustomer=null;
+
+function jsonp(params){
+  return new Promise(function(resolve,reject){
+    var cb='cb_'+Math.random().toString(36).slice(2);
+    var s=document.createElement('script');
+    var timer=setTimeout(function(){cleanup();reject(new Error('Request timed out.'));},15000);
+    function cleanup(){try{delete window[cb];}catch(e){window[cb]=undefined;}if(s.parentNode)s.parentNode.removeChild(s);clearTimeout(timer);}
+    window[cb]=function(d){cleanup();resolve(d);};
+    s.onerror=function(){cleanup();reject(new Error('Could not reach the server.'));};
+    var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
+    s.src=APPS_SCRIPT_URL+'?'+qs+'&callback='+cb;
+    document.head.appendChild(s);
+  });
+}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
+function timeAgo(iso){if(!iso)return '';var d=new Date(iso),now=new Date(),s=Math.floor((now-d)/1000);if(s<60)return 'just now';var m=Math.floor(s/60);if(m<60)return m+'m ago';var h=Math.floor(m/60);if(h<24)return h+'h '+(m%60)+'m ago';return Math.floor(h/24)+'d ago';}
+function fmtClock(iso){if(!iso)return '';return new Date(iso).toLocaleString([],{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});}
+function fmtDate(iso){if(!iso)return '';return new Date(iso).toLocaleDateString([],{day:'2-digit',month:'short',year:'numeric'});}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+function tryUnlock(){
+  if(document.getElementById('pw').value===STAFF_PASSWORD){
+    document.getElementById('lock').style.display='none';
+    document.getElementById('shell').style.display='block';
+    load();
+    if(!window._auto){window._auto=setInterval(function(){if(document.getElementById('shell').style.display!=='none')load(true);},30000);}
+  } else { document.getElementById('lock-err').textContent='Wrong password.'; document.getElementById('pw').value=''; }
+}
+document.getElementById('unlock').addEventListener('click',tryUnlock);
+document.getElementById('pw').addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock();});
+
+function load(silent){
+  if(APPS_SCRIPT_URL.indexOf('PASTE_YOUR')===0){document.getElementById('loading').textContent='Not connected yet - add the web app URL in admin.html.';return;}
+  if(!silent)document.getElementById('last-sync').textContent='Syncing…';
+  jsonp({action:'getData',token:READ_TOKEN}).then(function(d){
+    if(d&&d.ok){DATA=d;render();document.getElementById('last-sync').textContent='Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+    else {document.getElementById('loading').textContent=(d&&d.error==='Unauthorized')?'Access token mismatch - check READ_TOKEN matches Code.gs.':((d&&d.error)||'Could not load data.');}
+  }).catch(function(err){if(!silent)document.getElementById('last-sync').textContent='Offline - tap Refresh';if(!DATA)document.getElementById('loading').textContent=err.message;});
+}
+
+function render(){
+  document.getElementById('loading').style.display='none';
+  document.getElementById('padel-big').textContent=DATA.available.padel;
+  document.getElementById('tennis-big').textContent=DATA.available.tennis;
+  document.getElementById('padel-lbl').innerHTML='padel available · <b>'+DATA.out.padel+'</b> out of '+DATA.totals.padel;
+  document.getElementById('tennis-lbl').innerHTML='tennis available · <b>'+DATA.out.tennis+'</b> out of '+DATA.totals.tennis;
+  var active=DATA.rentals.filter(function(r){return r.status==='Out';});
+  var history=DATA.rentals.filter(function(r){return r.status!=='Out';});
+  document.getElementById('active-num').textContent=active.length;
+  document.getElementById('hist-num').textContent=history.length;
+  document.getElementById('players-num').textContent=DATA.customers.length;
+  var list=document.getElementById('list'), search=document.getElementById('search');
+  search.style.display=(currentTab==='active')?'none':'block';
+  if(currentTab==='history')search.placeholder='Search history by name…';
+  if(currentTab==='players')search.placeholder='Search players by name…';
+  if(currentTab==='active'){
+    if(active.length===0){list.innerHTML=emptyState('◇','Nothing out right now','Rentals from the QR form or new walk-ups show up here.');return;}
+    list.innerHTML=active.map(activeCard).join('');wireActiveButtons();
+  } else if(currentTab==='history'){
+    var q=(search.value||'').toLowerCase().trim();
+    var f=q?history.filter(function(r){return r.name.toLowerCase().indexOf(q)>=0;}):history;
+    if(f.length===0){list.innerHTML=emptyState('◇',q?'No matches':'No history yet',q?'Try a different name.':'Returned and damaged rentals are logged here.');return;}
+    list.innerHTML=f.map(historyCard).join('');
+  } else {
+    var q2=(search.value||'').toLowerCase().trim();
+    var c=q2?DATA.customers.filter(function(p){return p.name.toLowerCase().indexOf(q2)>=0;}):DATA.customers;
+    if(c.length===0){list.innerHTML=emptyState('◇',q2?'No matches':'No registered players yet',q2?'Try a different name.':'New players from the QR form are saved here.');return;}
+    list.innerHTML=c.map(playerCard).join('');wirePlayerButtons();
+  }
+}
+function chips(r){var c='';if(r.padel)c+='<span class="chip padel">'+r.padel+' padel</span>';if(r.tennis)c+='<span class="chip tennis">'+r.tennis+' tennis</span>';return '<div class="chips">'+c+'</div>';}
+function emptyState(ic,h,p){return '<div class="empty"><div class="em-ic">'+ic+'</div><div class="eh">'+h+'</div><div>'+p+'</div></div>';}
+function activeCard(r){
+  return '<div class="rental"><div class="top"><div class="who"><span class="nm">'+esc(r.name)+'</span><span class="id">'+r.id+'</span>'+
+    '<div class="contact">'+esc(r.phone)+(r.email?' · '+esc(r.email):'')+'</div></div>'+
+    '<div class="when">'+timeAgo(r.checkedOut)+'<br>'+fmtClock(r.checkedOut)+'</div></div>'+chips(r)+
+    '<div class="rowbtns"><button class="btn ok" data-ret="'+r.id+'">Returned OK</button><button class="btn dmg" data-dmg="'+r.id+'">Damaged / issue</button></div></div>';
+}
+function historyCard(r){
+  var pill=r.status==='Damaged'?'<span class="status-pill damaged">Damaged</span>':'<span class="status-pill returned">Returned</span>';
+  var notes=r.notes?'<div class="notes"><b>Issue:</b> '+esc(r.notes)+'</div>':'';
+  return '<div class="rental"><div class="top"><div class="who"><span class="nm">'+esc(r.name)+'</span><span class="id">'+r.id+'</span>'+
+    '<div class="contact">'+esc(r.phone)+(r.email?' · '+esc(r.email):'')+'</div></div>'+pill+'</div>'+chips(r)+notes+
+    '<div class="when" style="text-align:left;margin-top:10px">Out '+fmtClock(r.checkedOut)+' · Back '+fmtClock(r.returnedAt)+'</div></div>';
+}
+function playerCard(p){
+  return '<div class="player"><div class="pinfo"><div><span class="pn">'+esc(p.name)+'</span><span class="pid">'+p.id+'</span></div>'+
+    '<div class="pc">'+esc(p.phone)+(p.email?' · '+esc(p.email):'')+(p.dob?' · DOB '+esc(p.dob):'')+'<br>Registered '+fmtDate(p.registered)+'</div></div>'+
+    '<button class="btn prent" data-rent-name="'+esc(p.name)+'" data-rent-phone="'+esc(p.phone)+'">Rent</button></div>';
+}
+function wireActiveButtons(){
+  document.querySelectorAll('[data-ret]').forEach(function(b){b.addEventListener('click',function(){markReturn(b.dataset.ret,'Returned','',b);});});
+  document.querySelectorAll('[data-dmg]').forEach(function(b){b.addEventListener('click',function(){openDamage(b.dataset.dmg);});});
+}
+function wirePlayerButtons(){
+  document.querySelectorAll('[data-rent-name]').forEach(function(b){b.addEventListener('click',function(){openNewModal('existing');selectedCustomer={name:b.dataset.rentName,phone:b.dataset.rentPhone};document.getElementById('cust-search').value=b.dataset.rentName;renderCustResults();});});
+}
+function markReturn(id,status,notes,btn){
+  if(btn){btn.disabled=true;btn.textContent='Saving…';}
+  jsonp({action:'updateStatus',token:READ_TOKEN,id:id,status:status,notes:notes}).then(function(d){
+    if(d&&d.ok){toast(status==='Damaged'?'Logged as damaged':'Returned');load(true);}
+    else{toast((d&&d.error)||'Failed');if(btn){btn.disabled=false;btn.textContent='Returned OK';}}
+  }).catch(function(){toast('Connection error');if(btn){btn.disabled=false;btn.textContent='Returned OK';}});
+}
+
+document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});t.classList.add('active');currentTab=t.dataset.tab;document.getElementById('search').value='';if(DATA)render();});});
+document.getElementById('search').addEventListener('input',function(){if(DATA)render();});
+document.getElementById('refresh').addEventListener('click',function(){load();});
+
+function openDamage(id){dmgTargetId=id;document.getElementById('dmg-notes').value='';document.getElementById('dmg-err').classList.remove('show');document.getElementById('dmg-modal').classList.add('show');}
+document.getElementById('dmg-cancel').addEventListener('click',function(){document.getElementById('dmg-modal').classList.remove('show');});
+document.getElementById('dmg-save').addEventListener('click',function(){var notes=document.getElementById('dmg-notes').value.trim();if(!notes){var e=document.getElementById('dmg-err');e.textContent='Please describe the issue.';e.classList.add('show');return;}document.getElementById('dmg-modal').classList.remove('show');markReturn(dmgTargetId,'Damaged',notes,null);});
+
+function setMode(mode){
+  modalMode=mode;
+  document.getElementById('seg-new').classList.toggle('on',mode==='new');
+  document.getElementById('seg-existing').classList.toggle('on',mode==='existing');
+  document.getElementById('mode-new').style.display=(mode==='new')?'block':'none';
+  document.getElementById('mode-existing').style.display=(mode==='existing')?'block':'none';
+  document.getElementById('tc-block').style.display=(mode==='new')?'flex':'none';
+}
+function mAvail(){
+  var pa=DATA?DATA.available.padel:null, ta=DATA?DATA.available.tennis:null;
+  document.getElementById('m-padel-av').textContent=pa===null?'':pa+' free';
+  document.getElementById('m-tennis-av').textContent=ta===null?'':ta+' free';
+  document.getElementById('m-padel-c').textContent=mPick.padel;
+  document.getElementById('m-tennis-c').textContent=mPick.tennis;
+  document.querySelector('[data-s="padel"][data-d="-1"]').disabled=mPick.padel<=0;
+  document.querySelector('[data-s="padel"][data-d="1"]').disabled=(pa!==null&&mPick.padel>=pa);
+  document.querySelector('[data-s="tennis"][data-d="-1"]').disabled=mPick.tennis<=0;
+  document.querySelector('[data-s="tennis"][data-d="1"]').disabled=(ta!==null&&mPick.tennis>=ta);
+}
+document.querySelectorAll('#new-modal .stepper button').forEach(function(b){b.addEventListener('click',function(){var s=b.dataset.s,d=parseInt(b.dataset.d,10),nx=mPick[s]+d,max=DATA?DATA.available[s]:99;if(nx<0||nx>max)return;mPick[s]=nx;mAvail();});});
+
+function renderCustResults(){
+  var box=document.getElementById('cust-results');
+  if(!DATA){box.innerHTML='<div class="cust-empty">Loading…</div>';return;}
+  var q=(document.getElementById('cust-search').value||'').toLowerCase().trim();
+  var list=q?DATA.customers.filter(function(p){return p.name.toLowerCase().indexOf(q)>=0;}):DATA.customers;
+  if(list.length===0){box.innerHTML='<div class="cust-empty">No registered players match.</div>';return;}
+  box.innerHTML=list.slice(0,40).map(function(p){
+    var sel=selectedCustomer&&selectedCustomer.name===p.name&&selectedCustomer.phone===p.phone;
+    return '<div class="cust-row'+(sel?' sel':'')+'" data-cn="'+esc(p.name)+'" data-cp="'+esc(p.phone)+'"><div class="crn">'+esc(p.name)+'</div><div class="crc">'+esc(p.phone)+(p.email?' · '+esc(p.email):'')+'</div></div>';
+  }).join('');
+  box.querySelectorAll('.cust-row').forEach(function(row){row.addEventListener('click',function(){selectedCustomer={name:row.dataset.cn,phone:row.dataset.cp};renderCustResults();});});
+}
+document.getElementById('cust-search').addEventListener('input',function(){selectedCustomer=null;renderCustResults();});
+
+function openNewModal(mode){
+  mPick={padel:0,tennis:0};selectedCustomer=null;
+  ['m-name','m-email','m-phone','m-dob'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('m-agree').checked=false;
+  document.getElementById('cust-search').value='';
+  document.getElementById('new-err').classList.remove('show');
+  setMode(mode||'new');mAvail();renderCustResults();
+  document.getElementById('new-modal').classList.add('show');
+}
+document.getElementById('new-btn').addEventListener('click',function(){openNewModal('new');});
+document.getElementById('seg-new').addEventListener('click',function(){setMode('new');});
+document.getElementById('seg-existing').addEventListener('click',function(){setMode('existing');renderCustResults();});
+document.getElementById('new-cancel').addEventListener('click',function(){document.getElementById('new-modal').classList.remove('show');});
+
+document.getElementById('new-save').addEventListener('click',function(){
+  var err=document.getElementById('new-err');
+  function fail(m){err.textContent=m;err.classList.add('show');}
+  if(mPick.padel+mPick.tennis<1)return fail('Select at least one racket.');
+  var btn=this;
+  if(modalMode==='new'){
+    var name=document.getElementById('m-name').value.trim();
+    var email=document.getElementById('m-email').value.trim();
+    var phone=document.getElementById('m-phone').value.trim();
+    var dob=document.getElementById('m-dob').value;
+    if(!name)return fail('Enter the customer name.');
+    if(!email||email.indexOf('@')<1)return fail('Enter a valid email.');
+    if(!phone)return fail('Enter a phone number.');
+    if(!dob)return fail('Enter the date of birth.');
+    if(!document.getElementById('m-agree').checked)return fail('Confirm the customer accepted the terms.');
+    btn.disabled=true;btn.textContent='Saving…';
+    jsonp({action:'newPlayer',name:name,email:email,phone:phone,dob:dob,padel:mPick.padel,tennis:mPick.tennis,tc:'yes'})
+      .then(function(d){btn.disabled=false;btn.textContent='Save rental';if(d&&d.ok){document.getElementById('new-modal').classList.remove('show');toast('Player saved · '+d.id);load(true);}else fail((d&&d.error)||'Failed to save.');})
+      .catch(function(e){btn.disabled=false;btn.textContent='Save rental';fail(e.message||'Connection error.');});
+  } else {
+    if(!selectedCustomer)return fail('Pick a registered player from the list.');
+    btn.disabled=true;btn.textContent='Saving…';
+    jsonp({action:'existingRental',name:selectedCustomer.name,phone:selectedCustomer.phone,padel:mPick.padel,tennis:mPick.tennis})
+      .then(function(d){btn.disabled=false;btn.textContent='Save rental';if(d&&d.ok){document.getElementById('new-modal').classList.remove('show');toast('Rental saved · '+d.id);load(true);}else fail((d&&d.error)||'Failed to save.');})
+      .catch(function(e){btn.disabled=false;btn.textContent='Save rental';fail(e.message||'Connection error.');});
+  }
+});
+
+[['new-modal'],['dmg-modal']].forEach(function(p){var el=document.getElementById(p[0]);el.addEventListener('click',function(e){if(e.target===el)el.classList.remove('show');});});
+</script>
+</body>
+</html>
