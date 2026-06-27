@@ -19,7 +19,7 @@
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{background:var(--foam);color:var(--ink);font-family:Geologica,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   .brandbar{position:sticky;top:0;z-index:20;background:var(--mple);display:flex;justify-content:center;align-items:center;padding:22px 16px}
-  .brandbar img{height:45px;width:auto;display:block}
+  .brandbar img{height:40px;width:auto;display:block}
   .wrap{max-width:880px;margin:0 auto;padding:20px 16px 60px}
 
   #lock{position:fixed;inset:0;background:var(--foam);display:flex;flex-direction:column;z-index:50}
@@ -101,6 +101,9 @@
   .modal input[type=text],.modal input[type=email],.modal input[type=tel],.modal input[type=date],.modal textarea{
     width:100%;font-family:inherit;font-size:16px;font-weight:300;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:var(--foam);margin-bottom:14px}
   .modal input:focus,.modal textarea:focus{outline:none;border-color:var(--mple);background:#fff}
+  .modal input[type=date]{-webkit-appearance:none;-moz-appearance:none;appearance:none;display:block;min-width:0;line-height:1.2}
+  .modal input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0;padding:0}
+  .modal input[type=date]::-webkit-calendar-picker-indicator{margin-left:auto;flex:none}
   .modal textarea{resize:vertical;min-height:80px}
 
   .seg{display:flex;background:var(--foam);border:1px solid var(--line);border-radius:11px;padding:4px;margin-bottom:18px}
@@ -218,10 +221,10 @@
 /* ============================================================
    CONFIG - change these
    ============================================================ */
-var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiUjEhniuiDcz7srKCmJMR9n_HkftLouaCZ8BsXf78ef9wi2ufhHc9iTCQdNHWY0Jf_g/exec";
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxs0X1ZxnCzIgGC2k9ToXIpEgXlb6SDRstppxcAer_8hiERinmeaUIWhBMos8lhxeS7LA/exec";
 var READ_TOKEN      = "desk-7Kp2";    // MUST match READ_TOKEN in Code.gs
 var STAFF_PASSWORD  = "racket2026";   // staff password for this screen
-var CLUB_NAME       = "Aphrodite Hills Racket Club";
+var CLUB_NAME       = "Aphrodite Hills Raket Club";
 /* ============================================================ */
 
 document.title = CLUB_NAME + " - Rental Desk";
