@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<a href="index.html">Home</a>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Aphrodite Hills — Racket Hire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --foam:#F9F6F4; --white:#FFFFFF; --shell:#D6D1C3; --pearl:#CFCDC9; --line:#E7E2D9;
+    --mple:#003087; --mple-press:#00205C; --mple-soft:#E7EAF3;
+    --bronze:#8E7A6B; --bronze-soft:#F0ECE6;
+    --ink:#454545; --muted:#938C82;
+    --ok:#4A7A5C; --ok-soft:#E9F0EB; --alert:#A8503D; --alert-soft:#F6EAE6;
+    --radius:14px; --radius-sm:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{background:var(--foam);color:var(--ink);font-family:Geologica,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{min-height:100vh}
+
+  .brandbar{position:sticky;top:0;z-index:20;background:var(--mple);display:flex;justify-content:center;align-items:center;padding:13px 16px}
+  .brandbar img{height:30px;width:auto;display:block}
+
+  .wrap{width:100%;max-width:520px;margin:0 auto;padding:24px 16px 48px}
+
+  header{margin:6px 2px 22px}
+  .eyebrow{font-weight:500;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze)}
+  h1{font-family:'Playfair Display',Georgia,serif;font-weight:600;font-size:30px;line-height:1.12;margin-top:9px;letter-spacing:.005em;color:var(--mple)}
+  .sub{color:var(--ink);font-size:14.5px;font-weight:300;margin-top:9px;line-height:1.5}
+
+  .back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:inherit;font-size:13px;color:var(--muted);cursor:pointer;padding:6px 2px;margin-bottom:4px}
+  .back:active{color:var(--mple)}
+
+  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+  .card h2{font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--bronze);margin-bottom:16px}
+
+  /* chooser */
+  .choose-btn{width:100%;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px 20px;margin-bottom:14px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:16px;transition:border-color .15s,transform .08s}
+  .choose-btn:active{transform:scale(.99)}
+  .choose-btn.primary{border-color:var(--mple);border-width:1.5px}
+  .choose-btn .cic{width:50px;height:50px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:22px;font-family:'Playfair Display',serif}
+  .choose-btn.primary .cic{background:var(--mple-soft);color:var(--mple)}
+  .choose-btn.alt .cic{background:var(--bronze-soft);color:var(--bronze)}
+  .choose-btn .ct{flex:1}
+  .choose-btn .ch{font-family:'Playfair Display',serif;font-weight:600;font-size:19px;color:var(--mple)}
+  .choose-btn .cd{font-size:13px;color:var(--muted);font-weight:300;margin-top:4px;line-height:1.45}
+  .choose-btn .arr{color:var(--bronze);font-size:18px}
+
+  label{display:block;font-size:13px;font-weight:400;margin-bottom:7px;color:var(--ink)}
+  input[type=text],input[type=email],input[type=tel],input[type=date]{
+    width:100%;font-family:inherit;font-size:16px;font-weight:300;color:var(--ink);background:var(--foam);
+    border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 14px;transition:border-color .15s,background .15s}
+  input:focus{outline:none;border-color:var(--mple);background:#fff}
+  .field{margin-bottom:15px}.field:last-child{margin-bottom:0}
+
+  .sport{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid var(--line);border-radius:var(--radius-sm);margin-bottom:12px}
+  .sport:last-of-type{margin-bottom:0}
+  .sport .icon{width:42px;height:42px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:18px;font-family:'Playfair Display',serif;font-weight:600}
+  .sport.padel .icon{background:var(--mple-soft);color:var(--mple)}
+  .sport.tennis .icon{background:var(--bronze-soft);color:var(--bronze)}
+  .sport .meta{flex:1;min-width:0}
+  .sport .name{font-weight:400;font-size:15px;color:var(--ink)}
+  .sport .avail{font-size:12px;color:var(--muted);font-weight:300;margin-top:2px}
+  .stepper{display:flex;flex:none}
+  .stepper button{width:38px;height:38px;border:1px solid var(--line);background:#fff;font-size:20px;font-weight:400;color:var(--mple);cursor:pointer;display:grid;place-items:center;transition:background .12s}
+  .stepper button:first-child{border-radius:9px 0 0 9px}.stepper button:last-child{border-radius:0 9px 9px 0}
+  .stepper button:active{background:var(--foam)}.stepper button:disabled{opacity:.3;cursor:not-allowed;color:var(--muted)}
+  .stepper .count{width:42px;height:38px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;place-items:center;font-weight:500;font-size:16px;font-variant-numeric:tabular-nums;color:var(--ink)}
+
+  .terms-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;font-family:inherit;font-size:13px;color:var(--mple);font-weight:400;cursor:pointer;padding:4px 0}
+  .terms-toggle .chev{transition:transform .2s;color:var(--bronze)}
+  .terms-toggle[aria-expanded=true] .chev{transform:rotate(180deg)}
+  .terms-body{max-height:0;overflow:hidden;transition:max-height .28s ease}
+  .terms-body.open{max-height:1500px}
+  .terms-inner{font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;padding:12px 0 4px}
+  .terms-inner h4{color:var(--ink);font-size:12px;font-weight:500;margin:11px 0 3px}
+  .terms-inner p{margin-bottom:2px}
+  .agree{display:flex;gap:11px;align-items:flex-start;margin-top:14px;padding-top:15px;border-top:1px solid var(--line);cursor:pointer}
+  .agree input{width:21px;height:21px;flex:none;margin-top:1px;accent-color:var(--mple)}
+  .agree span{font-size:13px;font-weight:300;line-height:1.45;color:var(--ink)}
+
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+  .submit{width:100%;background:var(--mple);color:#fff;font-family:Geologica,sans-serif;font-weight:500;font-size:13.5px;letter-spacing:.12em;text-transform:uppercase;border:none;border-radius:var(--radius-sm);padding:17px;cursor:pointer;transition:background .15s}
+  .submit:active{background:var(--mple-press)}.submit:disabled{opacity:.5;cursor:not-allowed}
+
+  .msg{font-size:13px;font-weight:300;padding:12px 14px;border-radius:var(--radius-sm);margin-top:14px;display:none;line-height:1.5}
+  .msg.err{display:block;background:var(--alert-soft);color:var(--alert)}
+  .msg .switch{display:inline-block;margin-top:8px;font-weight:400;color:var(--alert);text-decoration:underline;cursor:pointer}
+
+  .done{text-align:center;padding:34px 22px}
+  .done .check{width:64px;height:64px;border-radius:50%;background:var(--mple-soft);color:var(--mple);display:grid;place-items:center;margin:0 auto 18px;font-size:30px}
+  .done h2{font-family:'Playfair Display',serif;font-size:23px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--mple);margin-bottom:10px}
+  .done p{color:var(--ink);font-size:14.5px;font-weight:300;line-height:1.55;margin-bottom:6px}
+  .done .ref{display:inline-block;margin-top:14px;font-family:'Playfair Display',serif;font-weight:600;color:var(--mple);background:var(--mple-soft);padding:8px 18px;border-radius:8px;letter-spacing:.06em}
+  .done .taken{margin-top:18px;font-size:14px;color:var(--ink);font-weight:400}
+  .done .hand{margin-top:20px;font-size:13px;color:var(--muted);font-weight:300;padding-top:18px;border-top:1px solid var(--line)}
+
+  footer{text-align:center;color:var(--muted);font-size:11px;font-weight:300;margin-top:22px;line-height:1.6}
+  footer .fb{color:var(--bronze);letter-spacing:.05em}
+</style>
+</head>
+<body>
+<div class="brandbar"><img src="aphrodite-logo-white.png" alt="Aphrodite Hills"></div>
+<div class="wrap">
+
+  <!-- SCREEN: chooser -->
+  <div id="screen-choose">
+    <header>
+      <div class="eyebrow">Racket Hire</div>
+      <h1>Hire rackets</h1>
+      <p class="sub">Have you rented from us before?</p>
+    </header>
+    <button class="choose-btn primary" id="go-new">
+      <div class="cic">✦</div>
+      <div class="ct"><div class="ch">First time here</div><div class="cd">Register your details, then pick up your rackets</div></div>
+      <div class="arr">→</div>
+    </button>
+    <button class="choose-btn alt" id="go-existing">
+      <div class="cic">↻</div>
+      <div class="ct"><div class="ch">I've rented before</div><div class="cd">Just your name, phone and what you're taking</div></div>
+      <div class="arr">→</div>
+    </button>
+    <footer>Your details are stored only for managing your rentals.<br><span class="fb">Aphrodite Hills · Kouklia, Paphos</span></footer>
+  </div>
+
+  <!-- SCREEN: new player -->
+  <div id="screen-new" style="display:none">
+    <button class="back" data-back>← Back</button>
+    <header>
+      <div class="eyebrow">New player · Register &amp; rent</div>
+      <h1>Let's get you set up</h1>
+      <p class="sub">We'll save your details so next time it's just your name and phone.</p>
+    </header>
+
+    <div class="card">
+      <h2>Your details</h2>
+      <div class="field"><label for="n-name">Full name</label><input type="text" id="n-name" autocomplete="name" placeholder="e.g. Maria Georgiou"></div>
+      <div class="field"><label for="n-email">Email</label><input type="email" id="n-email" autocomplete="email" placeholder="you@email.com"></div>
+      <div class="field"><label for="n-phone">Phone</label><input type="tel" id="n-phone" autocomplete="tel" placeholder="+357 ..."></div>
+      <div class="field"><label for="n-dob">Date of birth</label><input type="date" id="n-dob"></div>
+      <div class="hp"><label>Leave blank</label><input type="text" id="n-hp" tabindex="-1" autocomplete="off"></div>
+    </div>
+
+    <div class="card">
+      <h2>What are you taking?</h2>
+      <div class="sport padel">
+        <div class="icon">P</div>
+        <div class="meta"><div class="name">Padel racket</div><div class="avail" id="n-padel-avail">Checking…</div></div>
+        <div class="stepper"><button type="button" data-grp="n" data-sport="padel" data-dir="-1" aria-label="Fewer padel">−</button><div class="count" id="n-padel-count">0</div><button type="button" data-grp="n" data-sport="padel" data-dir="1" aria-label="More padel">+</button></div>
+      </div>
+      <div class="sport tennis">
+        <div class="icon">T</div>
+        <div class="meta"><div class="name">Tennis racket</div><div class="avail" id="n-tennis-avail">Checking…</div></div>
+        <div class="stepper"><button type="button" data-grp="n" data-sport="tennis" data-dir="-1" aria-label="Fewer tennis">−</button><div class="count" id="n-tennis-count">0</div><button type="button" data-grp="n" data-sport="tennis" data-dir="1" aria-label="More tennis">+</button></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Terms &amp; conditions</h2>
+      <button type="button" class="terms-toggle" id="terms-toggle" aria-expanded="false"><span>Read the full disclaimer</span><span class="chev">▾</span></button>
+      <div class="terms-body" id="terms-body"><div class="terms-inner" id="terms-text"></div></div>
+      <label class="agree"><input type="checkbox" id="n-agree"><span>I have read and agree to the disclaimer, and accept that lost or damaged equipment beyond normal wear is charged at full replacement or repair cost.</span></label>
+    </div>
+
+    <button class="submit" id="n-submit">Confirm hire</button>
+    <div class="msg err" id="n-error"></div>
+  </div>
+
+  <!-- SCREEN: existing player -->
+  <div id="screen-existing" style="display:none">
+    <button class="back" data-back>← Back</button>
+    <header>
+      <div class="eyebrow">Returning · Quick rental</div>
+      <h1>Welcome back</h1>
+      <p class="sub">Enter the name and phone you registered with.</p>
+    </header>
+
+    <div class="card">
+      <h2>Confirm it's you</h2>
+      <div class="field"><label for="e-name">Full name</label><input type="text" id="e-name" autocomplete="name" placeholder="e.g. Maria Georgiou"></div>
+      <div class="field"><label for="e-phone">Phone</label><input type="tel" id="e-phone" autocomplete="tel" placeholder="+357 ..."></div>
+      <div class="hp"><label>Leave blank</label><input type="text" id="e-hp" tabindex="-1" autocomplete="off"></div>
+    </div>
+
+    <div class="card">
+      <h2>What are you taking?</h2>
+      <div class="sport padel">
+        <div class="icon">P</div>
+        <div class="meta"><div class="name">Padel racket</div><div class="avail" id="e-padel-avail">Checking…</div></div>
+        <div class="stepper"><button type="button" data-grp="e" data-sport="padel" data-dir="-1" aria-label="Fewer padel">−</button><div class="count" id="e-padel-count">0</div><button type="button" data-grp="e" data-sport="padel" data-dir="1" aria-label="More padel">+</button></div>
+      </div>
+      <div class="sport tennis">
+        <div class="icon">T</div>
+        <div class="meta"><div class="name">Tennis racket</div><div class="avail" id="e-tennis-avail">Checking…</div></div>
+        <div class="stepper"><button type="button" data-grp="e" data-sport="tennis" data-dir="-1" aria-label="Fewer tennis">−</button><div class="count" id="e-tennis-count">0</div><button type="button" data-grp="e" data-sport="tennis" data-dir="1" aria-label="More tennis">+</button></div>
+      </div>
+    </div>
+
+    <button class="submit" id="e-submit">Confirm hire</button>
+    <div class="msg err" id="e-error"></div>
+  </div>
+
+  <!-- SCREEN: done -->
+  <div id="screen-done" class="card done" style="display:none">
+    <div class="check">✓</div>
+    <h2>You're all set</h2>
+    <p>Show this screen to a member of staff and they'll hand over your rackets.</p>
+    <div class="ref" id="ref-id">R0000</div>
+    <div class="taken" id="taken-summary"></div>
+    <div class="hand">Please return everything to reception after your session.</div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   CONFIG - change these two lines
+   ============================================================ */
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiUjEhniuiDcz7srKCmJMR9n_HkftLouaCZ8BsXf78ef9wi2ufhHc9iTCQdNHWY0Jf_g/exec";
+var CLUB_NAME = "Aphrodite Hills Racket Club";
+/* ============================================================ */
+
+document.title = CLUB_NAME + " - Racket Hire";
+
+var TERMS = [
+  ["", "All users of the golf and sports facilities, including but not limited to the golf course, driving range, academy areas, tennis courts, padel courts, and any associated training or recreational areas, acknowledge and agree to the following:"],
+  ["1. Assumption of Risk", "Participation in sports activities involves inherent risks, including but not limited to physical injury, accidents caused by equipment, other participants, or environmental conditions. All users voluntarily assume full responsibility for any risks, injuries, or damages arising from their participation."],
+  ["2. Health & Fitness", "Users confirm they are in good physical condition and capable of participating in the chosen activity. It is the individual's responsibility to consult a medical professional if there are any concerns regarding fitness or health."],
+  ["3. Equipment Use & Hire Responsibility", "All equipment, whether personal or provided by the facility, must be used responsibly and for its intended purpose only. Any hired or rented equipment that is lost, stolen, or damaged (beyond normal wear and tear) will be charged to the user at full replacement or repair cost."],
+  ["4. Supervision & Coaching", "Any coaching sessions or supervised activities do not eliminate risk. Participants must follow all instructions provided by coaches or staff at all times."],
+  ["5. Conduct & Safety Compliance", "Users must adhere to all safety rules, signage, and staff instructions across all facilities, including proper court etiquette and respectful behavior toward other players."],
+  ["6. Property & Personal Belongings", "The facility is not responsible for loss, theft, or damage to personal belongings brought onto the premises."],
+  ["7. Weather & Environmental Conditions", "Activities may be affected by weather or court conditions. Users accept that play may be suspended or modified for safety reasons, and participation under such conditions is at their own risk."],
+  ["8. Liability Waiver", "To the fullest extent permitted by law, the facility, its management, employees, and affiliates shall not be held liable for any injury, loss, damage, or expense incurred as a result of using the golf or sports facilities."],
+  ["9. Acceptance of Terms", "By accessing or using any of the facilities, users confirm that they have read, understood, and agreed to this disclaimer."]
+];
+(function(){var html="";TERMS.forEach(function(t){if(t[0])html+="<h4>"+t[0]+"</h4>";html+="<p>"+t[1]+"</p>";});document.getElementById('terms-text').innerHTML=html;})();
+
+var stock={padel:null,tennis:null};
+var pick={n:{padel:0,tennis:0},e:{padel:0,tennis:0}};
+
+function jsonp(params){
+  return new Promise(function(resolve,reject){
+    var cb='cb_'+Math.random().toString(36).slice(2);
+    var s=document.createElement('script');
+    var timer=setTimeout(function(){cleanup();reject(new Error('Request timed out. Check your connection.'));},15000);
+    function cleanup(){try{delete window[cb];}catch(e){window[cb]=undefined;}if(s.parentNode)s.parentNode.removeChild(s);clearTimeout(timer);}
+    window[cb]=function(d){cleanup();resolve(d);};
+    s.onerror=function(){cleanup();reject(new Error('Could not reach the server.'));};
+    var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
+    s.src=APPS_SCRIPT_URL+'?'+qs+'&callback='+cb;
+    document.head.appendChild(s);
+  });
+}
+function renderSteppers(){
+  ['n','e'].forEach(function(g){
+    ['padel','tennis'].forEach(function(sp){
+      var av=document.getElementById(g+'-'+sp+'-avail');
+      if(stock[sp]===null)av.textContent='Availability unknown';
+      else if(stock[sp]<=0)av.textContent='None available right now';
+      else av.textContent=stock[sp]+' available';
+      document.getElementById(g+'-'+sp+'-count').textContent=pick[g][sp];
+      var plus=document.querySelector('button[data-grp="'+g+'"][data-sport="'+sp+'"][data-dir="1"]');
+      var minus=document.querySelector('button[data-grp="'+g+'"][data-sport="'+sp+'"][data-dir="-1"]');
+      minus.disabled=pick[g][sp]<=0;
+      plus.disabled=(stock[sp]!==null&&pick[g][sp]>=stock[sp]);
+    });
+  });
+}
+function loadAvailability(){
+  if(APPS_SCRIPT_URL.indexOf('PASTE_YOUR')===0){renderSteppers();return;}
+  jsonp({action:'getAvailability'}).then(function(d){if(d&&d.ok){stock.padel=d.available.padel;stock.tennis=d.available.tennis;}renderSteppers();}).catch(function(){renderSteppers();});
+}
+document.querySelectorAll('.stepper button').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var g=btn.dataset.grp,sp=btn.dataset.sport,dir=parseInt(btn.dataset.dir,10),nx=pick[g][sp]+dir;
+    if(nx<0)return;if(stock[sp]!==null&&nx>stock[sp])return;pick[g][sp]=nx;renderSteppers();
+  });
+});
+
+function show(id){['screen-choose','screen-new','screen-existing','screen-done'].forEach(function(s){document.getElementById(s).style.display=(s===id)?'block':'none';});window.scrollTo(0,0);}
+document.getElementById('go-new').addEventListener('click',function(){loadAvailability();show('screen-new');});
+document.getElementById('go-existing').addEventListener('click',function(){loadAvailability();show('screen-existing');});
+document.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',function(){show('screen-choose');});});
+
+var tt=document.getElementById('terms-toggle');
+tt.addEventListener('click',function(){var open=tt.getAttribute('aria-expanded')==='true';tt.setAttribute('aria-expanded',String(!open));document.getElementById('terms-body').classList.toggle('open',!open);});
+
+function showErr(id,m,withSwitch){var e=document.getElementById(id);e.innerHTML=m+(withSwitch?'<br><span class="switch" id="switch-new">Register as a new player →</span>':'');e.style.display='block';if(withSwitch){document.getElementById('switch-new').addEventListener('click',function(){show('screen-new');});}e.scrollIntoView({behavior:'smooth',block:'center'});}
+function clearErr(id){document.getElementById(id).style.display='none';}
+function goDone(id,g){document.getElementById('ref-id').textContent=id;var parts=[];if(pick[g].padel)parts.push(pick[g].padel+' padel');if(pick[g].tennis)parts.push(pick[g].tennis+' tennis');var tot=pick[g].padel+pick[g].tennis;document.getElementById('taken-summary').textContent='Taking: '+parts.join(' + ')+(tot>1?' rackets':' racket');show('screen-done');}
+
+document.getElementById('n-submit').addEventListener('click',function(){
+  clearErr('n-error');
+  if(document.getElementById('n-hp').value)return;
+  var name=document.getElementById('n-name').value.trim();
+  var email=document.getElementById('n-email').value.trim();
+  var phone=document.getElementById('n-phone').value.trim();
+  var dob=document.getElementById('n-dob').value;
+  if(!name)return showErr('n-error','Please enter your full name.');
+  if(!email||email.indexOf('@')<1)return showErr('n-error','Please enter a valid email.');
+  if(!phone)return showErr('n-error','Please enter a phone number.');
+  if(!dob)return showErr('n-error','Please enter your date of birth.');
+  if(pick.n.padel+pick.n.tennis<1)return showErr('n-error','Select at least one racket to hire.');
+  if(!document.getElementById('n-agree').checked)return showErr('n-error','Please accept the terms to continue.');
+  if(APPS_SCRIPT_URL.indexOf('PASTE_YOUR')===0)return showErr('n-error','This form is not connected yet. The web app URL still needs to be added.');
+  var btn=this;btn.disabled=true;btn.textContent='Confirming…';
+  jsonp({action:'newPlayer',name:name,email:email,phone:phone,dob:dob,padel:pick.n.padel,tennis:pick.n.tennis,tc:'yes'})
+    .then(function(d){if(d&&d.ok){goDone(d.id,'n');}else{btn.disabled=false;btn.textContent='Confirm hire';showErr('n-error',(d&&d.error)||'Something went wrong. Please try again.');}})
+    .catch(function(err){btn.disabled=false;btn.textContent='Confirm hire';showErr('n-error',err.message||'Could not submit. Please try again.');});
+});
+
+document.getElementById('e-submit').addEventListener('click',function(){
+  clearErr('e-error');
+  if(document.getElementById('e-hp').value)return;
+  var name=document.getElementById('e-name').value.trim();
+  var phone=document.getElementById('e-phone').value.trim();
+  if(!name)return showErr('e-error','Please enter your full name.');
+  if(!phone)return showErr('e-error','Please enter the phone number you registered with.');
+  if(pick.e.padel+pick.e.tennis<1)return showErr('e-error','Select at least one racket to hire.');
+  if(APPS_SCRIPT_URL.indexOf('PASTE_YOUR')===0)return showErr('e-error','This form is not connected yet. The web app URL still needs to be added.');
+  var btn=this;btn.disabled=true;btn.textContent='Confirming…';
+  jsonp({action:'existingRental',name:name,phone:phone,padel:pick.e.padel,tennis:pick.e.tennis})
+    .then(function(d){if(d&&d.ok){goDone(d.id,'e');}else if(d&&d.code==='NOT_FOUND'){btn.disabled=false;btn.textContent='Confirm hire';showErr('e-error',d.error,true);}else{btn.disabled=false;btn.textContent='Confirm hire';showErr('e-error',(d&&d.error)||'Something went wrong. Please try again.');}})
+    .catch(function(err){btn.disabled=false;btn.textContent='Confirm hire';showErr('e-error',err.message||'Could not submit. Please try again.');});
+});
+
+renderSteppers();
+</script>
+</body>
+</html>
